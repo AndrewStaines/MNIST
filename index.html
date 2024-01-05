@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Image Prediction</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+            color: #333;
+        }
+
+        h1 {
+            color: #4285f4;
+            margin-top: 50px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #4285f4;
+        }
+
+        #app-image {
+            max-width: 5%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MNIST Image Prediction</h1>
+
+    <form>
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image">
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <div id="result">Prediction Result: <span id="prediction">...</span></div>
+
+    <img id="app-image" src="107.jpg" alt="App Image">
+    <!-- <img src="107.jpg" alt=""> -->
+
+    <!-- Update the existing script tag in your HTML with this code -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get references to HTML elements
+        const form = document.querySelector('form');
+        const predictionResult = document.getElementById('prediction');
+
+        // Add event listener for form submission
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            try {
+                // Get the selected image file
+                const imageInput = document.getElementById('image');
+                const imageFile = imageInput.files[0];
+
+                // Create a FormData object and append the image file
+                const formData = new FormData();
+                formData.append('image', imageFile);
+
+                // Make a Fetch API request to your FastAPI endpoint
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    predictionResult.textContent = result.predicted_class;
+                } else {
+                    predictionResult.textContent = 'Error predicting the image.';
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+                predictionResult.textContent = 'Error predicting the image.';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
