@@ -1,11 +1,8 @@
 # Import necessary libraries
 import streamlit as st
-import pandas as pd
-import tensorflow as tf
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing import image
-import matplotlib.pyplot as plt
 
 # Load your model
 model = load_model("MNIST_model")
