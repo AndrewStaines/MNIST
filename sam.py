@@ -1,8 +1,11 @@
 # Import necessary libraries
 import streamlit as st
+import pandas as pd
+import tensorflow as tf
 import numpy as np
-from keras.models import load_model
-from keras.preprocessing import image
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import matplotlib.pyplot as plt
 
 # Load your model
 model = load_model("MNIST_model")
@@ -13,7 +16,7 @@ st.title('MNIST Image Prediction App')
 # Sidebar with user input for prediction
 st.sidebar.header('User Input')
 
-# File uploader for user to upload an image
+# File uploader for the user to upload an image
 uploaded_file = st.sidebar.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
